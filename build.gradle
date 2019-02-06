@@ -1,0 +1,31 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.2.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+apply from: 'dependencies.gradle'
+
+repositories() {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: ver.springboot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: ver.springboot
+    
+    //data
+    implementation group: 'com.h2database', name: 'h2', version: ver.h2
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: ver.jaxb
+    
+}
+
+sourceCompatibility = ver.java
+targetCompatibility = ver.java
+
+springBoot {
+    mainClassName = 'org.ormfux.springbootsample.Application'
+}
+

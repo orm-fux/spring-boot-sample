@@ -1,0 +1,8 @@
+ext {
+    ver = [
+        h2: '1.4.196',
+        java: '1.8',
+        jaxb: '2.3.1',
+        springboot: '2.1.2.RELEASE',
+     ]
+}
