@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/rest/book")
+@RequestMapping(value = "/${restservice.path.root}${restservice.path.book.root}")
 public class BookRestService {
     
     @Autowired
@@ -30,13 +30,13 @@ public class BookRestService {
     @Autowired
     private GenreService genreService;
 
-    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "/create")
+    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "${restservice.path.book.create}")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody BookDTO createBook(@RequestBody final BookDTO bookDTO) {
         return toDTO(bookService.createBook(toEntity(bookDTO)));
     }
     
-    @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "/update")
+    @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "${restservice.path.book.update}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public @ResponseBody BookDTO updateBook(@RequestBody final BookDTO bookDTO,
                                             final HttpServletResponse response) {
@@ -45,7 +45,7 @@ public class BookRestService {
         return getBookById(bookDTO.getId(), response);
     }
     
-    @RequestMapping(method = RequestMethod.DELETE, path = "/delete/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, path = "${restservice.path.book.delete}/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteBook(@PathVariable("id") final long id) {
         bookService.deleteBook(id);
@@ -57,7 +57,7 @@ public class BookRestService {
         return toDTOs(bookService.getAll());
     }
     
-    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "${restservice.path.book.byid}/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody BookDTO getBookById(@PathVariable("id") final Long id, 
                                              final HttpServletResponse response) {
@@ -69,13 +69,13 @@ public class BookRestService {
         }
     }
     
-    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "/bytitle/{name}")
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.book.bytitle}/{name}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<BookDTO> getAllBooksByTitle(@PathVariable("title") final String title, final HttpServletResponse response) {
         return toDTOs(bookService.getAllByTitle(title));
     }
     
-    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "/bygenre/{genreId}")
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.book.bygenre}/{genreId}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<BookDTO> getAllBooksByGenre(@PathVariable("genreId") final long genreId, final HttpServletResponse response) {
         return toDTOs(bookService.getAllByGenre(genreService.getGenre(genreId)));

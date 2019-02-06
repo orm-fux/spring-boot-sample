@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/rest/genre")
+@RequestMapping(value = "${restservice.path.root}${restservice.path.genre.root}")
 public class GenreRestService {
     
     @Autowired
     private GenreService genreService;
 
-    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "/create")
+    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "${restservice.path.genre.create}")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody GenreDTO createGenre(@RequestBody final GenreDTO genreDTO) {
         return toDTO(genreService.createGenre(toEntity(genreDTO)));
     }
     
-    @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "/update")
+    @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "${restservice.path.genre.update}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public @ResponseBody GenreDTO updateGenre(@RequestBody final GenreDTO genreDTO,
                                               final HttpServletResponse response) {
@@ -41,7 +41,7 @@ public class GenreRestService {
         return getGenreById(genreDTO.getId(), response);
     }
     
-    @RequestMapping(method = RequestMethod.DELETE, path = "/delete/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, path = "${restservice.path.genre.delete}/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteGenre(@PathVariable("id") final long id) {
         genreService.deleteGenre(id);
@@ -53,7 +53,7 @@ public class GenreRestService {
         return genreService.getAll().stream().map(genre -> toDTO(genre)).collect(Collectors.toList());
     }
     
-    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "${restservice.path.genre.byid}/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody GenreDTO getGenreById(@PathVariable("id") final Long id, 
                                                final HttpServletResponse response) {
@@ -65,7 +65,7 @@ public class GenreRestService {
         }
     }
     
-    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "/byname/{name}")
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.genre.byname}/{name}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody GenreDTO getGenreByName(@PathVariable("name") final String name, final HttpServletResponse response) {
         final Genre genre = genreService.getByName(name);

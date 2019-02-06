@@ -1,0 +1,20 @@
+restservice.path:
+   root: '/rest'
+   genre:
+      root: '/genre'
+      all: ''
+      create: '/create'
+      update: '/update'
+      delete: '/delete'
+      byid: ''
+      byname: '/byname'
+   book:
+      root: '/book'
+      all: ''
+      create: '/create'
+      update: '/update'
+      delete: '/delete'
+      byid: ''
+      bytitle: '/bytitle'
+      bygenre: '/bygenre'
+   
