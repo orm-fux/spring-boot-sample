@@ -12,6 +12,7 @@ import org.ormfux.springbootsample.service.GenreService;
 import org.ormfux.springbootsample.webservice.rest.dto.BookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/${restservice.path.root}${restservice.path.book.root}")
+@Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
 public class BookRestService {
     
     @Autowired

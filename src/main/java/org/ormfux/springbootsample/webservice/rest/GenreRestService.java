@@ -11,6 +11,7 @@ import org.ormfux.springbootsample.service.GenreService;
 import org.ormfux.springbootsample.webservice.rest.dto.GenreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +29,14 @@ public class GenreRestService {
 
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "${restservice.path.genre.create}")
     @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_ADMIN")
     public @ResponseBody GenreDTO createGenre(@RequestBody final GenreDTO genreDTO) {
         return toDTO(genreService.createGenre(toEntity(genreDTO)));
     }
     
     @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "${restservice.path.genre.update}")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_ADMIN")
     public @ResponseBody GenreDTO updateGenre(@RequestBody final GenreDTO genreDTO,
                                               final HttpServletResponse response) {
         genreService.updateGenre(toEntity(genreDTO));
@@ -43,18 +46,21 @@ public class GenreRestService {
     
     @RequestMapping(method = RequestMethod.DELETE, path = "${restservice.path.genre.delete}/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_ADMIN")
     public void deleteGenre(@PathVariable("id") final long id) {
         genreService.deleteGenre(id);
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     public @ResponseBody List<GenreDTO> getAllGenres() {
         return genreService.getAll().stream().map(genre -> toDTO(genre)).collect(Collectors.toList());
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "${restservice.path.genre.byid}/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     public @ResponseBody GenreDTO getGenreById(@PathVariable("id") final Long id, 
                                                final HttpServletResponse response) {
         try {
@@ -67,6 +73,7 @@ public class GenreRestService {
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.genre.byname}/{name}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     public @ResponseBody GenreDTO getGenreByName(@PathVariable("name") final String name, final HttpServletResponse response) {
         final Genre genre = genreService.getByName(name);
         
