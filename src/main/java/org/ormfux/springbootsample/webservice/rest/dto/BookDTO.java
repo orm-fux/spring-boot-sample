@@ -2,14 +2,21 @@ package org.ormfux.springbootsample.webservice.rest.dto;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "book", description = "A book.")
 public class BookDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
-
+    
+    @ApiModelProperty(value = "Book id.")
     private long id;
 
+    @ApiModelProperty(value = "Book title.")
     private String title;
 
+    @ApiModelProperty(value = "Id of the book's genre.")
     private long genreId;
 
     

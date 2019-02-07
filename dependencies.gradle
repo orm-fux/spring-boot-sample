@@ -4,5 +4,6 @@ ext {
         java: '1.8',
         jaxb: '2.3.1',
         springboot: '2.1.2.RELEASE',
+        swagger: '2.9.2'
      ]
 }

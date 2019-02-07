@@ -20,8 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping(value = "/${restservice.path.root}${restservice.path.book.root}")
+@Api("REST service for book management.")
 public class BookRestService {
     
     @Autowired
@@ -32,13 +37,19 @@ public class BookRestService {
 
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "${restservice.path.book.create}")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody BookDTO createBook(@RequestBody final BookDTO bookDTO) {
+    @ApiOperation("Creates a new book.")
+    public @ResponseBody BookDTO createBook(@RequestBody 
+                                                @ApiParam(type = "book", name = "book", value = "The book data.") 
+                                                final BookDTO bookDTO) {
         return toDTO(bookService.createBook(toEntity(bookDTO)));
     }
     
     @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "${restservice.path.book.update}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public @ResponseBody BookDTO updateBook(@RequestBody final BookDTO bookDTO,
+    @ApiOperation("Updates an existing book.")
+    public @ResponseBody BookDTO updateBook(@RequestBody 
+                                                @ApiParam(type = "book", name = "book", value = "The book data.")  
+                                                final BookDTO bookDTO,
                                             final HttpServletResponse response) {
         bookService.updateBook(toEntity(bookDTO));
         
@@ -47,19 +58,24 @@ public class BookRestService {
     
     @RequestMapping(method = RequestMethod.DELETE, path = "${restservice.path.book.delete}/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteBook(@PathVariable("id") final long id) {
+    @ApiOperation("Deletes a book.")
+    public void deleteBook(@PathVariable("id") 
+                            @ApiParam("The book id.") final long id) {
         bookService.deleteBook(id);
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "All books.", responseContainer = "List")
     public @ResponseBody List<BookDTO> getAllBooks() {
         return toDTOs(bookService.getAll());
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "${restservice.path.book.byid}/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody BookDTO getBookById(@PathVariable("id") final Long id, 
+    @ApiOperation("A specific book.")
+    public @ResponseBody BookDTO getBookById(@PathVariable("id") 
+                                                @ApiParam("The book id.") final Long id, 
                                              final HttpServletResponse response) {
         try {
             return toDTO(bookService.getBook(id));
@@ -71,13 +87,17 @@ public class BookRestService {
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.book.bytitle}/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody List<BookDTO> getAllBooksByTitle(@PathVariable("title") final String title, final HttpServletResponse response) {
+    @ApiOperation(value = "All books where the title contains a provided phrase.", responseContainer = "List")
+    public @ResponseBody List<BookDTO> getAllBooksByTitle(@PathVariable("title") 
+                                                            @ApiParam("The phrase in the title") final String title) {
         return toDTOs(bookService.getAllByTitle(title));
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.book.bygenre}/{genreId}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody List<BookDTO> getAllBooksByGenre(@PathVariable("genreId") final long genreId, final HttpServletResponse response) {
+    @ApiOperation(value = "All books of a genre.", responseContainer = "List")
+    public @ResponseBody List<BookDTO> getAllBooksByGenre(@PathVariable("genreId") 
+                                                            @ApiParam("The genre id") final long genreId) {
         return toDTOs(bookService.getAllByGenre(genreService.getGenre(genreId)));
     }
     

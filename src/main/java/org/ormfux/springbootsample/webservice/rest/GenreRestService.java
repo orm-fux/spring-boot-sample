@@ -19,8 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping(value = "${restservice.path.root}${restservice.path.genre.root}")
+@Api("REST access for bok genre management.")
 public class GenreRestService {
     
     @Autowired
@@ -28,13 +33,17 @@ public class GenreRestService {
 
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, path = "${restservice.path.genre.create}")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody GenreDTO createGenre(@RequestBody final GenreDTO genreDTO) {
+    @ApiOperation(value = "Create a new genre.")
+    public @ResponseBody GenreDTO createGenre(@RequestBody 
+                                              @ApiParam(name = "genre", value = "genre", required = true) final GenreDTO genreDTO) {
         return toDTO(genreService.createGenre(toEntity(genreDTO)));
     }
     
     @RequestMapping(method = RequestMethod.POST, consumes = {"application/json"}, path = "${restservice.path.genre.update}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public @ResponseBody GenreDTO updateGenre(@RequestBody final GenreDTO genreDTO,
+    @ApiOperation("Creates a new genre.")
+    public @ResponseBody GenreDTO updateGenre(@RequestBody
+                                                @ApiParam(name = "genre", value = "genre", required = true) final GenreDTO genreDTO,
                                               final HttpServletResponse response) {
         genreService.updateGenre(toEntity(genreDTO));
         
@@ -43,19 +52,24 @@ public class GenreRestService {
     
     @RequestMapping(method = RequestMethod.DELETE, path = "${restservice.path.genre.delete}/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteGenre(@PathVariable("id") final long id) {
+    @ApiOperation("Deletes an existing genre.")
+    public void deleteGenre(@PathVariable("id") 
+                                @ApiParam(value = "The id of the genre to delete.", required = true) final long id) {
         genreService.deleteGenre(id);
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "All available genres.", responseContainer = "List")
     public @ResponseBody List<GenreDTO> getAllGenres() {
         return genreService.getAll().stream().map(genre -> toDTO(genre)).collect(Collectors.toList());
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path = "${restservice.path.genre.byid}/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody GenreDTO getGenreById(@PathVariable("id") final Long id, 
+    @ApiOperation("A specific genre for the genre id.")
+    public @ResponseBody GenreDTO getGenreById(@PathVariable("id") 
+                                                   @ApiParam(value = "The id of the genre.", required = true) final Long id, 
                                                final HttpServletResponse response) {
         try {
             return toDTO(genreService.getGenre(id));
@@ -67,7 +81,10 @@ public class GenreRestService {
     
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json"}, path= "${restservice.path.genre.byname}/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody GenreDTO getGenreByName(@PathVariable("name") final String name, final HttpServletResponse response) {
+    @ApiOperation("Finds the genre with the provided name.")
+    public @ResponseBody GenreDTO getGenreByName(@PathVariable("name") 
+                                                     @ApiParam(value = "The genre name", required = true) final String name, 
+                                                 final HttpServletResponse response) {
         final Genre genre = genreService.getByName(name);
         
         if (genre == null) {
