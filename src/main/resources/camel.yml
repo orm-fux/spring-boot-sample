@@ -1,0 +1,30 @@
+camel.component.servlet.mapping:
+   contextPath: /camel-rest/*
+   servletName: CamelServlet
+   enable: true
+   
+camel.rest:
+   service: 
+      root: /services
+      genre:
+         root: 
+         all: /genre
+         create: /genre/create
+         update: /genre/update
+         delete: /genre/delete
+         byid: /genre
+         byname: /genre/byname
+      book:
+         root: 
+         all: /book
+         create: /book/create
+         update: /book/update
+         delete: /book/delete
+         byid: /book
+         bytitle: /book/bytitle
+         bygenre: /book/bygenre
+         
+   api: 
+      root: /api
+      title: Camel REST API
+      version: 1.0.0

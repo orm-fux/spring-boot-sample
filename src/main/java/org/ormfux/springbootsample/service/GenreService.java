@@ -20,7 +20,7 @@ public class GenreService {
     }
 
     public Genre getGenre(long id) {
-        return genreRepository.getOne(id);
+        return genreRepository.findById(id);
     }
 
     public void updateGenre(Genre genre) {

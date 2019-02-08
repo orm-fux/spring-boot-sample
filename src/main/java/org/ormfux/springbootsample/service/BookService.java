@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.ormfux.springbootsample.crud.BookRepository;
 import org.ormfux.springbootsample.domain.Book;
-import org.ormfux.springbootsample.domain.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -16,12 +15,15 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
     
+    @Autowired
+    private GenreService genreService;
+    
     public Book createBook(Book book) {
         return bookRepository.save(book);
     }
 
     public Book getBook(long id) {
-        return bookRepository.getOne(id);
+        return bookRepository.findById(id);
     }
 
     public void updateBook(Book book) {
@@ -33,15 +35,15 @@ public class BookService {
     }
     
     public List<Book> getAll() {
-        return bookRepository.findAll(Sort.by(Order.asc("name")));
+        return bookRepository.findAll(Sort.by(Order.asc("title")));
     }
     
     public List<Book> getAllByTitle(final String name) {
         return bookRepository.findAllByTitleOrderByTitleAsc(name);
     }
     
-    public List<Book> getAllByGenre(final Genre genre) {
-        return bookRepository.findAllByGenreOrderByTitleAsc(genre);
+    public List<Book> getAllByGenre(final long genreId) {
+        return bookRepository.findAllByGenreOrderByTitleAsc(genreService.getGenre(genreId));
     }
     
 }
